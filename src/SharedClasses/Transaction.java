@@ -8,7 +8,7 @@ public class Transaction {
 	}
 	TransactionCodes CCC;
 	String toAccountNumber;
-	int amount;
+	String amount;
 	String fromAccountNumber;
 	String accountName;
 	
@@ -16,7 +16,7 @@ public class Transaction {
 	//add other attributes
 	
 	
-	public Transaction(TransactionCodes code, String toAccountNumber, int amount, String fromAccountNumber, String accountName) {
+	public Transaction(TransactionCodes code, String toAccountNumber, String amount, String fromAccountNumber, String accountName) {
 		CCC = code;
 		this.toAccountNumber = toAccountNumber;
 		this.amount = amount;
