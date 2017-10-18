@@ -1,18 +1,30 @@
 package SharedClasses;
 
+
 public class Transaction {
 
-	String MMM;
-	String NNN;
+	public enum TransactionCodes {
+		DEP, WDR, XFR, NEW, DEL, EOS
+	}
+	TransactionCodes CCC;
+	String toAccountNumber;
+	int amount;
+	String fromAccountNumber;
+	String accountName;
+	
+	
 	//add other attributes
 	
 	
-	public Transaction(String type, String NNN) {
-		MMM = type;
-		this.NNN = NNN;
+	public Transaction(TransactionCodes code, String toAccountNumber, int amount, String fromAccountNumber, String accountName) {
+		CCC = code;
+		this.toAccountNumber = toAccountNumber;
+		this.amount = amount;
+		this.fromAccountNumber = fromAccountNumber;
+		this.accountName = accountName;
 	}
 
 	public String toString(){
-		return MMM + " " + NNN;
+		return  CCC.toString() + " " + toAccountNumber + " " + amount + " " + fromAccountNumber + " " + accountName;
 	}
 }

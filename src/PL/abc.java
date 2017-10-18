@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import DAL.Data;
 import SharedClasses.Transaction;
+import SharedClasses.Transaction.TransactionCodes;
 import SharedClasses.User;
 
 public class abc {
@@ -15,13 +16,9 @@ public class abc {
 	public static void main(String[] args) {
 		Data data = new Data();
 		data.initUserFile();
-		data.saveNewUser(new User("admin2","admin123"));
-		User user2 = data.loadUser("admin2");
-		System.out.println(user2.getUsername());
-		
 		LinkedList<Transaction> list = new LinkedList<Transaction>();
-		list.add(new Transaction("abc","def"));
-		list.add(new Transaction("123","456"));
+		list.add(new Transaction(TransactionCodes.NEW,"abc", 100, "def", "master"));
+		list.add(new Transaction(TransactionCodes.XFR,"jjj", 200, "abc", "master"));
 		data.writeTransactions(list);
 	}
 
