@@ -1,2 +1,2 @@
-NEW abc 100 def master
-XFR jjj 200 abc master
+NEW 1234567 000 000 test
+EOS 000 000 000 ***
