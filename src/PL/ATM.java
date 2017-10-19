@@ -15,13 +15,13 @@ public class ATM {
 		data.initUserFile();
 		LinkedList<Transaction> list = new LinkedList<Transaction>(); //store user inputs in list
 		
-		while (loggedIn = false) //wait until the user logins before accepting any other input
+		while (loggedIn == false) //wait until the user logins before accepting any other input
 		{
 			System.out.print("Please login:");
 			String input = System.console().readLine();
 			if (input == "login")
 			{
-				while (loggedIn = false)
+				while (loggedIn == false)
 				{
 					System.out.print("Enter 'ATM' for a normal session, or 'agent' for an agent session:");
 					input = System.console().readLine();
@@ -38,7 +38,7 @@ public class ATM {
 			}
 		}
 			
-		while (loggedIn = true)
+		while (loggedIn == true)
 		{
 			if (input == "logout") //upon logout, write EOS and write the Transactions file
 			{
