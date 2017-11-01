@@ -1,0 +1,4 @@
+login
+machine
+withdraw 123a567 50r0
+logout
