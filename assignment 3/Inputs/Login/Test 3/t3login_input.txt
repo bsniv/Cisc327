@@ -1,0 +1,4 @@
+login
+machine
+createacct 1234567 jeff
+logout

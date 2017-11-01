@@ -1,0 +1,4 @@
+login
+agent
+createacct 0234567 test
+logout

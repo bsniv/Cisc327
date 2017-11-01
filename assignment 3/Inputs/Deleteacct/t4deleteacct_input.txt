@@ -1,0 +1,4 @@
+login
+agent
+deleteacct 12 test
+logout
