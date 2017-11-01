@@ -27,4 +27,12 @@ public class Transaction {
 	public String toString(){
 		return  CCC.toString() + " " + toAccountNumber + " " + amount + " " + fromAccountNumber + " " + accountName;
 	}
+	
+	public String getToAccountNumber(){
+		return toAccountNumber;
+	}
+	
+	public String getFromAccountNumber(){
+		return fromAccountNumber;
+	}
 }
