@@ -1,0 +1,4 @@
+login
+machine
+transfer 1a34569 79o4321 50r0
+logout
