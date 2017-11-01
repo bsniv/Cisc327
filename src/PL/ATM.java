@@ -4,19 +4,22 @@ import java.util.LinkedList;
 import java.io.*;
 import java.util.Scanner;
 
+import BL.BL;
 import DAL.Data;
 import SharedClasses.Transaction;
 import SharedClasses.Transaction.TransactionCodes;
 
 public class ATM {
 
-	public static void main(String[] args) {
+	BL bl;
+	Scanner s;
+	public ATM(){
+		s = new Scanner(System.in);
+	}
+	public void start(BL bl) {
 		boolean loggedIn = false; //Is the user logged in?
 		boolean isAgent = false; //Is the user an agent?
-		Data data = new Data();
-		data.initUserFile();
-		LinkedList<Transaction> list = new LinkedList<Transaction>(); //store user inputs in list
-		Scanner s = new Scanner(System.in);
+		this.bl = bl;
 		
 		while (!loggedIn) //wait until the user logins before accepting any other input
 		{
@@ -48,8 +51,8 @@ public class ATM {
 			if (input.equals("logout")) //upon logout, write EOS and write the Transactions file
 			{
 				loggedIn = false;
-				list.add(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
-				data.writeTransactions(list);
+				bl.addTransaction(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
+				bl.writeTransactions();
 				System.exit(0);
 			}
 			
@@ -63,7 +66,7 @@ public class ATM {
 					System.out.println("Enter the new account's name:"); //ask for the account name
 					String accountName = s.nextLine();
 					
-					list.add(new Transaction(TransactionCodes.NEW, accountNumber, "000", "000", accountName));
+					bl.addTransaction(new Transaction(TransactionCodes.NEW, accountNumber, "000", "000", accountName));
 				}
 				else
 					System.out.println("Sorry, that is a privileged command");
@@ -79,7 +82,7 @@ public class ATM {
 					System.out.println("Enter the account's name:"); //ask for the account name
 					String accountName = s.nextLine();
 					
-					list.add(new Transaction(TransactionCodes.DEL, accountNumber, "000", "000", accountName));
+					bl.addTransaction(new Transaction(TransactionCodes.DEL, accountNumber, "000", "000", accountName));
 				}
 				else
 					System.out.println("Sorry, that is a privileged command");
@@ -98,7 +101,7 @@ public class ATM {
 				else if (Integer.parseInt(amount) > 99999999 && isAgent)
 					System.out.println("Sorry, not event agents can deposit more than $999,999.99 at once");
 				else
-					list.add(new Transaction(TransactionCodes.DEP, accountNumber, amount, "000", "***"));
+					bl.addTransaction(new Transaction(TransactionCodes.DEP, accountNumber, amount, "000", "***"));
 			}
 			
 			if (input.equals("withdraw")) //Withdrawing money
@@ -114,7 +117,7 @@ public class ATM {
 				else if (Integer.parseInt(amount) > 99999999 && isAgent)
 					System.out.println("Sorry, not event agents can withdraw more than $999,999.99 at once");
 				else
-					list.add(new Transaction(TransactionCodes.WDR, accountNumber, amount, "000", "***"));
+					bl.addTransaction(new Transaction(TransactionCodes.WDR, accountNumber, amount, "000", "***"));
 				
 			}
 			
@@ -134,7 +137,7 @@ public class ATM {
 				else if (Integer.parseInt(amount) > 99999999 && isAgent)
 					System.out.println("Sorry, not event agents can withdraw more than $999,999.99 at once");
 				else
-					list.add(new Transaction(TransactionCodes.XFR, accountNumber1, amount, accountNumber2, "***"));
+					bl.addTransaction(new Transaction(TransactionCodes.XFR, accountNumber1, amount, accountNumber2, "***"));
 			}
 		}
 		
