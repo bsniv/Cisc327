@@ -55,9 +55,9 @@ public class ATM
 	
 	private boolean chooseSessionType()
 	{
-		System.out.println("Enter 'ATM' for a normal session, or 'agent' for an agent session:");
+		System.out.println("Enter 'machine' for a normal session, or 'agent' for an agent session:");
 		String input = s.nextLine();
-		if (input.equals("ATM"))
+		if (input.equals("machine"))
 		{
 			isAgent = false;
 			return true;
@@ -74,9 +74,9 @@ public class ATM
 	private void outputCommands(boolean isAgent)
 	{
 		if (isAgent)
-			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct *account-number* *account-name*\ndeleteacct *account-number* *account-name*\ndeposit *account-number* *amount*\nwithdraw *account-number* *amount*\ntransfer *from-account-number* *to-account-number* *amount*\n");
+			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct *account-number* *account-name*\ndeleteacct *account-number* *account-name*\ndeposit *account-number* *amount-in-cents*\nwithdraw *account-number* *amount-in-cents*\ntransfer *from-account-number* *to-account-number* *amount-in-cents*\n");
 		else
-			System.out.print("Please enter a command from the following list:\nlogout\ndeposit *account-number* *amount*\nwithdraw *account-number* *amount*\ntransfer *from-account-number* *to-account-number* *amount*\n");
+			System.out.print("Please enter a command from the following list:\nlogout\ndeposit *account-number* *amount-in-cents*\nwithdraw *account-number* *amount-in-cents*\ntransfer *from-account-number* *to-account-number* *amount-in-cents*\n");
 	}
 	
 	private void executeCommand(String command)
@@ -157,13 +157,13 @@ public class ATM
 		
 		if (name.charAt(0) == ' ')
 		{
-			System.out.println("Account names cannot begin with a space.");
+			System.out.println("Account names cannot begin with a space. Please try again.");
 			return false;
 		}
 		
 		if (name.charAt(name.length()-1) == ' ')
 		{
-			System.out.println("Account names cannot end with a space.");
+			System.out.println("Account names cannot end with a space. Please try again.");
 			return false;
 		}
 			
@@ -176,26 +176,26 @@ public class ATM
 		{
 			if (!Character.isDigit(money.charAt(i)))
 			{
-				System.out.println("Money amounts can only contain digits.");
+				System.out.println("Money amounts can only contain digits. Please try again.");
 				return false;
 			}
 		}
 		
 		if (money.charAt(0) == '0') //If the string begins with a 0, it is invalid
 		{
-			System.out.println("Money amounts cannot begin with '0'.");
+			System.out.println("Money amounts cannot begin with '0'. Please try again.");
 			return false;
 		}
 		
 		int amount = Integer.parseInt(money);
 		if (!isAgent && amount > 100000) //if a non-agent attempts to move more than $1000, it is invalid
 		{
-			System.out.println("Sorry, only agents can move amounts greater than $1000.");
+			System.out.println("Sorry, only agents can move amounts greater than $1000. Please try again.");
 			return false;
 		}
 		else if (isAgent && amount > 99999999)
 		{
-			System.out.println("Sorry, not even agents can move amounts greater than $999,999.99.");
+			System.out.println("Sorry, not even agents can move amounts greater than $999,999.99. Please try again.");
 			return false;
 		}
 		
@@ -206,7 +206,7 @@ public class ATM
 	{
 		if (!isAgent) //Do not allow unprivileged users access
 		{
-			System.out.println("Sorry, that is a privileged command");
+			System.out.println("Sorry, that is a privileged command. Please try again.");
 			return;
 		}
 			
@@ -237,7 +237,7 @@ public class ATM
 	{
 		if (!isAgent)
 		{
-			System.out.println("Sorry, that is a privileged command");
+			System.out.println("Sorry, that is a privileged command. Please try again.");
 			return;
 		}
 			
@@ -253,7 +253,7 @@ public class ATM
 		
 		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
 		{
-			System.out.println("That account number is not assigned to an account.");
+			System.out.println("That account number is not assigned to an account. Please try again.");
 			return;
 		}
 		
@@ -278,7 +278,7 @@ public class ATM
 		
 		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
 		{
-			System.out.println("That account number is not assigned to an account.");
+			System.out.println("That account number is not assigned to an account. Please try again.");
 			return;
 		}
 		
@@ -303,7 +303,7 @@ public class ATM
 		
 		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
 		{
-			System.out.println("That account number is not assigned to an account.");
+			System.out.println("That account number is not assigned to an account. Please try again.");
 			return;
 		}
 		
@@ -331,13 +331,13 @@ public class ATM
 		
 		if (bl.validateFreeAccountNumber(parts[1])) //Check that the first account number is in use
 		{
-			System.out.println("The first account number is not assigned to an account.");
+			System.out.println("The first account number is not assigned to an account. Please try again.");
 			return;
 		}
 		
 		if (bl.validateFreeAccountNumber(parts[2])) //Check that the second account number is in use
 		{
-			System.out.println("The second account number is not assigned to an account.");
+			System.out.println("The second account number is not assigned to an account. Please try again.");
 			return;
 		}
 		
@@ -347,6 +347,4 @@ public class ATM
 		System.out.println("You have successfully transferred $" + Double.parseDouble(parts[3])/100 + " from Account Number: " + parts[1] + " to Account Number: " + parts[2] + ".");
 		bl.addTransaction(new Transaction(TransactionCodes.XFR, parts[1], parts[3], parts[2], "***"));
 	}
-
-		
 }
