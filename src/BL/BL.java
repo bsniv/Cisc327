@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import DAL.Data;
 import SharedClasses.Transaction;
+import SharedClasses.Transaction.TransactionCodes;
 import SharedClasses.User;
 
 public class BL {
@@ -11,10 +12,12 @@ public class BL {
 	LinkedList<Transaction> list;
 	Data data;
 	LinkedList<User> deletedAccounts;
+	LinkedList<User> createdAccounts;
 	
 	public BL(Data data) {
 		list = new LinkedList<Transaction>(); //store user inputs in list
 		deletedAccounts =  new LinkedList<User>(); 
+		createdAccounts =  new LinkedList<User>(); 
 		this.data = data;
 	}
 	
@@ -29,6 +32,16 @@ public class BL {
 				return false;
 			}
 		}
+		for(User user : createdAccounts){
+			if (t.getToAccountNumber().equals(user.getUsername()) || t.getFromAccountNumber().equals(user.getUsername())){
+				System.out.println("created account is not allowed to do transactions");
+				return false;
+			}
+		}
+		if (t.getTC() == TransactionCodes.DEL)
+			deletedAccounts.add(new User(t.getFromAccountNumber(),t.getFromAccountNumber()));
+		if (t.getTC() == TransactionCodes.NEW)
+			createdAccounts.add(new User(t.getFromAccountNumber(),t.getFromAccountNumber()));
 		list.add(t);
 		return true;
 	}

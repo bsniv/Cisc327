@@ -35,4 +35,8 @@ public class Transaction {
 	public String getFromAccountNumber(){
 		return fromAccountNumber;
 	}
+	
+	public TransactionCodes getTC(){
+		return CCC;
+	}
 }
