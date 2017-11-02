@@ -65,6 +65,7 @@ public class ATM
 		else if  (input.equals("agent"))
 		{
 			isAgent = true;
+			
 			return true;
 		}
 		else
@@ -107,7 +108,7 @@ public class ATM
 		isAgent = false;
 		sessionTypeChosen = false;
 		
-		bl.addTransaction(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
+		bl.addTransaction(new Transaction(TransactionCodes.EOS, "0000000", "000", "0000000", "***"));
 		bl.writeTransactions();	
 		System.out.println("You have successfully logged out. Have a nice day.");
 	}
@@ -248,7 +249,7 @@ public class ATM
 			return;
 			
 		System.out.println("You have successfully created an account with Account Number: " + parts[1] + " and Account Name: " + parts[2] + ".");
-		bl.addTransaction(new Transaction(TransactionCodes.NEW, parts[1], "000", "000", parts[2]));	
+		bl.addTransaction(new Transaction(TransactionCodes.NEW, parts[1], "000", "0000000", parts[2]));	
 	}
 	
 	private void deleteacct(String command)
@@ -279,7 +280,7 @@ public class ATM
 			return;
 		
 		System.out.println("You have successfully deleted the account with Account Number: " + parts[1] + " and Account Name: " + parts[2] + ".");
-		bl.addTransaction(new Transaction(TransactionCodes.DEL, parts[1], "000", "000", parts[2]));
+		bl.addTransaction(new Transaction(TransactionCodes.DEL, parts[1], "000", "0000000", parts[2]));
 	}
 	
 	private void deposit(String command)
@@ -304,7 +305,7 @@ public class ATM
 			return;
 		
 		System.out.println("You have successfully deposited $" + Double.parseDouble(parts[2])/100 + " to Account Number: " + parts[1] + ".");
-		bl.addTransaction(new Transaction(TransactionCodes.DEP, parts[1], parts[2], "000", "***"));	
+		bl.addTransaction(new Transaction(TransactionCodes.DEP, parts[1], parts[2], "0000000", "***"));	
 	}
 	
 	private void withdraw(String command)
@@ -329,7 +330,7 @@ public class ATM
 			return;
 		
 		System.out.println("You have successfully withdrawn $" + Double.parseDouble(parts[2])/100 + " from Account Number: " + parts[1] + ".");
-		bl.addTransaction(new Transaction(TransactionCodes.WDR, parts[1], parts[2], "000", "***"));
+		bl.addTransaction(new Transaction(TransactionCodes.WDR, parts[1], parts[2], "0000000", "***"));
 	}
 	
 	private void transfer(String command)
