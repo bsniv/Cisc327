@@ -43,10 +43,12 @@ public class Data {
 		try (BufferedReader br = new BufferedReader(new FileReader(userFilePath))) {
 
 			String line;
-			while ((line = br.readLine()) != null && !(line = br.readLine()).equals("0000000")) {
+			line = br.readLine();
+			while (line != null && !line.equals("0000000")) {
 				if (!checkOnlyNumbers(line))
 					throw new RuntimeException("user file corrupted");
 				users.add(new User(line,line));
+				line = br.readLine();
 			}
 
 		} catch (IOException e) {
