@@ -1,0 +1,26 @@
+Please login:
+login
+Enter 'machine' for a normal session, or 'agent' for an agent session:
+machine
+Please enter a command from the following list:
+logout
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+login
+That is an invalid input. Please try again.
+Please enter a command from the following list:
+logout
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+machine
+That is an invalid input. Please try again.
+Please enter a command from the following list:
+logout
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+logout
+You have successfully logged out. Have a nice day.
+Please login:

@@ -1,0 +1,32 @@
+Please login:
+login
+Enter 'machine' for a normal session, or 'agent' for an agent session:
+agent
+Please enter a command from the following list:
+logout
+createacct *account-number* *account-name*
+deleteacct *account-number* *account-name*
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+deleteacct 1234567 test
+You have successfully deleted the account with Account Number: 1234567 and Account Name: test.
+Please enter a command from the following list:
+logout
+createacct *account-number* *account-name*
+deleteacct *account-number* *account-name*
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+withdraw 1234567 001
+You cannot perform transactions on a deleted account. Please try again.
+Please enter a command from the following list:
+logout
+createacct *account-number* *account-name*
+deleteacct *account-number* *account-name*
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+logout
+You have successfully logged out. Have a nice day.
+Please login:

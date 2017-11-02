@@ -1,4 +1,4 @@
 login
 agent
-createacct 1234567 'test '
+createacct 1234567 test 
 logout

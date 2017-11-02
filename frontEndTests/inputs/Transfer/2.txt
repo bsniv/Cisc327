@@ -1,4 +1,4 @@
 login
 machine
-transfer 1a34569 79o4321 5000
+transfer 1234567 7654321 5000
 logout

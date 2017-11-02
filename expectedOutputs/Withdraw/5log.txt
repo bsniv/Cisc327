@@ -1,0 +1,23 @@
+Please login:
+login
+Enter 'machine' for a normal session, or 'agent' for an agent session:
+agent
+Please enter a command from the following list:
+logout
+createacct *account-number* *account-name*
+deleteacct *account-number* *account-name*
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+withdraw 1234567 100000000
+Sorry, not even agents can move amounts greater than $999,999.99. Please try again.
+Please enter a command from the following list:
+logout
+createacct *account-number* *account-name*
+deleteacct *account-number* *account-name*
+deposit *account-number* *amount-in-cents*
+withdraw *account-number* *amount-in-cents*
+transfer *from-account-number* *to-account-number* *amount-in-cents*
+logout
+You have successfully logged out. Have a nice day.
+Please login:

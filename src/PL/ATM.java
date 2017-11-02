@@ -181,13 +181,31 @@ public class ATM
 			}
 		}
 		
-		if (money.charAt(0) == '0') //If the string begins with a 0, it is invalid
+		if (money.length() < 3) //Money amounts must be at least 3 digits
 		{
-			System.out.println("Money amounts cannot begin with '0'. Please try again.");
+			System.out.println("Money amounts must be expressed in cents using at least 3 digits.");
 			return false;
 		}
 		
-		int amount = Integer.parseInt(money);
+		if (money.charAt(0) == '0' && money.length() > 3) //If the string begins with a 0 and is longer than 3 digits, it is invalid
+		{
+			System.out.println("Money amounts cannot begin with '0' if they are greater than $0.99. Please try again.");
+			return false;
+		}
+		
+		int amount;
+		if (money.charAt(1) == '0' && money.charAt(0) == '0')
+		{
+			amount = Character.getNumericValue(money.charAt(2));
+		}
+		else if (money.charAt(0) == '0')
+		{
+			amount = Integer.parseInt(money.substring(1));
+		}
+		else
+		{
+			amount = Integer.parseInt(money);
+		}
 		if (!isAgent && amount > 100000) //if a non-agent attempts to move more than $1000, it is invalid
 		{
 			System.out.println("Sorry, only agents can move amounts greater than $1000. Please try again.");
