@@ -1,147 +1,348 @@
 package PL;
 
-import java.util.LinkedList;
-import java.io.*;
-import java.util.Scanner;
 
+import java.util.Scanner;
 import BL.BL;
-import DAL.Data;
 import SharedClasses.Transaction;
 import SharedClasses.Transaction.TransactionCodes;
 
-public class ATM {
+public class ATM 
+{
 
 	BL bl;
 	Scanner s;
-	public ATM(){
+	boolean loggedIn; //Is the user logged in?
+	boolean isAgent; //Is the user an agent?
+	boolean sessionTypeChosen; //Has the user chosen a mode yet?
+	
+	public ATM()
+	{
 		s = new Scanner(System.in);
+		loggedIn = false;
+		isAgent = false;
 	}
-	public void start(BL bl) {
-		boolean loggedIn = false; //Is the user logged in?
-		boolean isAgent = false; //Is the user an agent?
+	
+	private boolean login()
+	{
+		System.out.println("Please login:");
+		String input = s.nextLine();
+		if (input.equals("login"))
+			return true;
+		else
+			return false;
+	}
+	
+	private boolean chooseSessionType()
+	{
+		System.out.println("Enter 'ATM' for a normal session, or 'agent' for an agent session:");
+		String input = s.nextLine();
+		if (input.equals("ATM"))
+		{
+			isAgent = false;
+			return true;
+		}
+		else if  (input.equals("agent"))
+		{
+			isAgent = true;
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	private void outputCommands(boolean isAgent)
+	{
+		if (isAgent)
+			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct\ndeleteacct\ndeposit\nwithdraw\ntransfer\n");
+		else
+			System.out.print("Please enter a command from the following list:\nlogout\ndeposit\nwithdraw\ntransfer\n");
+	}
+	
+	private void executeCommand(String command)
+	{
+		String[] parts = command.split(" ");
+		
+		switch (parts[0])
+		{
+		case "logout":     logout();
+					       break;
+		case "createacct": createacct(command);
+						   break;
+		case "deleteacct": deleteacct(command);
+						   break;
+		case "deposit":    deposit(command);
+						   break;
+		case "withdraw":   withdraw(command);
+						   break;
+		case "transfer":   transfer(command);
+						   break;
+		default: 		   System.out.println("That is an invalid input. Please try again.");
+		}
+	}
+		
+	public void logout() 
+	{
+		loggedIn = false;
+		isAgent = false;
+		sessionTypeChosen = false;
+		
+		bl.addTransaction(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
+		bl.writeTransactions();	
+	}
+	
+	public boolean validAccountNumber(String number) //Checks if given account number is valid
+	{
+		if (number.length() != 7) //If the account number is not exactly 7 digits, it is invalid
+		{
+			System.out.println("That account number is not 7 digits long. Please try again");
+			return false;
+		}
+		
+		for (int i = 0; i < number.length(); i++) //If the account number is not comprised solely of digits, it is invalid
+		{
+			if (!Character.isDigit(number.charAt(i)))
+			{
+				System.out.println("The account number may only be comprised of digits 0-9, and may not include a leading 0. Please try again");
+				return false;
+			}
+		}
+		
+		if (number.charAt(0) == '0') //If the account number begins with a '0', it is invalid
+		{
+			System.out.println("Account numbers cannot begin with a '0'. Please try again.");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean validAccountName(String name) //Checks if given account name is valid
+	{
+		if (name.length() > 30 || name.length() <3) //If the account name is not between 3 and 30 characters, it is invalid
+		{
+			System.out.println("Account names must be between 3 and 30 alphanumeric characters. Please try again.");
+			return false;
+		}
+		
+		for (int i = 0; i < name.length(); i++) //If the account name contains characters other than letters, numbers, and spaces, it is invalid
+		{
+			if (!Character.isAlphabetic(name.charAt(i)) && !(name.charAt(i) == ' ') && !Character.isDigit(name.charAt(i)))
+			{
+				System.out.println("Account names can only contain alphanumeric characters and spaces. Please try again.");
+				return false;
+			}
+		}
+		
+		if (name.charAt(0) == ' ')
+		{
+			System.out.println("Account names cannot begin with a space.");
+			return false;
+		}
+		
+		if (name.charAt(name.length()-1) == ' ')
+		{
+			System.out.println("Account names cannot end with a space.");
+			return false;
+		}
+			
+		return true;
+	}
+	
+	public boolean validMoneyAmount(String money) //Checks that the given money string is valid
+	{
+		for (int i = 0; i < money.length(); i++) //If the string contains any characters other than digits, it is invalid
+		{
+			if (!Character.isDigit(money.charAt(i)))
+			{
+				System.out.println("Money amounts can only contain digits.");
+				return false;
+			}
+		}
+		
+		if (money.charAt(0) == '0') //If the string begins with a 0, it is invalid
+		{
+			System.out.println("Money amounts cannot begin with '0'.");
+			return false;
+		}
+		
+		int amount = Integer.parseInt(money);
+		if (!isAgent && amount > 100000) //if a non-agent attempts to move more than $1000, it is invalid
+		{
+			System.out.println("Sorry, only agents can move amounts greater than $1000.");
+			return false;
+		}
+		else if (isAgent && amount > 99999999)
+		{
+			System.out.println("Sorry, not even agents can move amounts greater than $999,999.99.");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void createacct(String command)
+	{
+		if (!isAgent) //Do not allow unprivileged users access
+		{
+			System.out.println("Sorry, that is a privileged command");
+			return;
+		}
+			
+		String[] parts = command.split(" "); //If there are more than 3 arguments, it is invalid
+		if (parts.length != 3)
+		{
+			System.out.println("That is an invalid input. Please try again.");
+			return;
+		}
+		
+		if (!validAccountNumber(parts[1])) //Check that the account number is valid
+			return;
+		
+		if (!bl.validateFreeAccountNumber(parts[1])) //Check that the account number is not already in use
+		{
+			System.out.println("That account number is already taken. Please try again.");
+			return;
+		}
+		
+		if (!validAccountName(parts[2])) //Check that the account name is valid
+			return;
+			
+		bl.addTransaction(new Transaction(TransactionCodes.NEW, parts[1], "000", "000", parts[2]));	
+	}
+	
+	private void deleteacct(String command)
+	{
+		if (!isAgent)
+		{
+			System.out.println("Sorry, that is a privileged command");
+			return;
+		}
+			
+		String[] parts = command.split(" ");
+		if (parts.length != 3)
+		{
+			System.out.println("That is an invalid input. Please try again.");
+			return;
+		}
+		
+		if (!validAccountNumber(parts[1])) //Check that the account number is valid
+			return;
+		
+		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
+		{
+			System.out.println("That account number is not assigned to an account.");
+			return;
+		}
+		
+		if (!validAccountName(parts[2])) //Check that the account name is valid
+			return;
+		
+		bl.addTransaction(new Transaction(TransactionCodes.DEL, parts[1], "000", "000", parts[2]));
+	}
+	
+	private void deposit(String command)
+	{
+		String[] parts = command.split(" ");
+		if (parts.length != 3)
+		{
+			System.out.println("That is an invalid input. Please try again.");
+			return;
+		}
+		
+		if (!validAccountNumber(parts[1])) //Check that the account number is valid
+			return;
+		
+		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
+		{
+			System.out.println("That account number is not assigned to an account.");
+			return;
+		}
+		
+		if (!validMoneyAmount(parts[2])) //Check that the money value is valid
+			return;
+		
+		bl.addTransaction(new Transaction(TransactionCodes.DEP, parts[1], parts[2], "000", "***"));	
+	}
+	
+	private void withdraw(String command)
+	{
+		String[] parts = command.split(" ");
+		if (parts.length != 3)
+		{
+			System.out.println("That is an invalid input. Please try again.");
+			return;
+		}
+		
+		if (!validAccountNumber(parts[1])) //Check that the account number is valid
+			return;
+		
+		if (bl.validateFreeAccountNumber(parts[1])) //Check that the account number is in use
+		{
+			System.out.println("That account number is not assigned to an account.");
+			return;
+		}
+		
+		if (!validMoneyAmount(parts[2])) //Check that the money value is valid
+			return;
+		
+		bl.addTransaction(new Transaction(TransactionCodes.WDR, parts[1], parts[2], "000", "***"));
+	}
+	
+	private void transfer(String command)
+	{
+		String[] parts = command.split(" ");
+		if (parts.length != 4)
+		{
+			System.out.println("That is an invalid input. Please try again.");
+			return;
+		}
+		
+		if (!validAccountNumber(parts[1])) //Check that the first account number is valid
+			return;
+		
+		if (!validAccountNumber(parts[3])) //Check that the second account number is valid
+			return;
+		
+		if (bl.validateFreeAccountNumber(parts[1])) //Check that the first account number is in use
+		{
+			System.out.println("The first account number is not assigned to an account.");
+			return;
+		}
+		
+		if (bl.validateFreeAccountNumber(parts[3])) //Check that the second account number is in use
+		{
+			System.out.println("The second account number is not assigned to an account.");
+			return;
+		}
+		
+		if (!validMoneyAmount(parts[2])) //Check that the money amount is valid
+			return;
+		
+		bl.addTransaction(new Transaction(TransactionCodes.XFR, parts[1], parts[2], parts[3], "***"));
+	}
+	
+	public void start(BL bl) 
+	{
 		this.bl = bl;
 		
-		while (!loggedIn) //wait until the user logins before accepting any other input
+		while (true)
 		{
-			System.out.println("Please login:");
-			String input = s.nextLine();
-			if (input.equals("login"))
+			while (!loggedIn) //wait until the user logins before accepting any other input
+				loggedIn = login();
+			
+			while (!sessionTypeChosen) //wait until the user decides to choose agent or ATM mode
+				sessionTypeChosen = chooseSessionType();
+			
+			while (loggedIn)
 			{
-				while (!loggedIn)
-				{
-					System.out.println("Enter 'ATM' for a normal session, or 'agent' for an agent session:");
-					input = s.nextLine();
-					if (input.equals("ATM"))
-					{
-						loggedIn = true;
-						isAgent = false;
-					}
-					else if (input.equals("agent"))
-					{
-						loggedIn = true;
-						isAgent = true;
-					}
+				outputCommands(isAgent);
+				
+				String input = s.nextLine();
+				executeCommand (input);
 			}
 		}
-			
-		while (loggedIn)
-		{
-			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct\ndeleteacct\ndeposit\nwithdraw\ntransfer\n");
-			input = s.nextLine();
-			if (input.equals("logout")) //upon logout, write EOS and write the Transactions file
-			{
-				loggedIn = false;
-				bl.addTransaction(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
-				bl.writeTransactions();
-				System.exit(0);
-			}
-			
-			if (input.equals("createacct")) //Creating account
-			{
-				if (isAgent)
-				{
-					System.out.println("Enter the new account's number:"); //ask for the account number
-					String accountNumber = s.nextLine();
-					
-					System.out.println("Enter the new account's name:"); //ask for the account name
-					String accountName = s.nextLine();
-					
-					bl.addTransaction(new Transaction(TransactionCodes.NEW, accountNumber, "000", "000", accountName));
-				}
-				else
-					System.out.println("Sorry, that is a privileged command");
-			}
-			
-			if (input.equals("deleteacct")) //Deleting account
-			{
-				if (isAgent)
-				{
-					System.out.println("Enter the account's number:"); //ask for the account number
-					String accountNumber = s.nextLine();
-					
-					System.out.println("Enter the account's name:"); //ask for the account name
-					String accountName = s.nextLine();
-					
-					bl.addTransaction(new Transaction(TransactionCodes.DEL, accountNumber, "000", "000", accountName));
-				}
-				else
-					System.out.println("Sorry, that is a privileged command");
-			}
-			
-			if (input.equals("deposit")) //Depositing money
-			{
-				System.out.println("Enter the account's number:"); //ask for the account number
-				String accountNumber = s.nextLine();
-				
-				System.out.println("Enter the amount to be deposited"); //ask for the deposited amount
-				String amount = s.nextLine();
-				
-				if (Integer.parseInt(amount) > 100000 && !isAgent)
-					System.out.println("Sorry, only agents can deposit more than $1000.00 at once");
-				else if (Integer.parseInt(amount) > 99999999 && isAgent)
-					System.out.println("Sorry, not event agents can deposit more than $999,999.99 at once");
-				else
-					bl.addTransaction(new Transaction(TransactionCodes.DEP, accountNumber, amount, "000", "***"));
-			}
-			
-			if (input.equals("withdraw")) //Withdrawing money
-			{
-				System.out.println("Enter the account's number:"); //ask for the account number
-				String accountNumber = s.nextLine();
-				
-				System.out.println("Enter the amount to be deposited"); //ask for the deposited amount
-				String amount = s.nextLine();
-				
-				if (Integer.parseInt(amount) > 100000 && !isAgent)
-					System.out.println("Sorry, only agents can withdraw more than $1000.00 at once");
-				else if (Integer.parseInt(amount) > 99999999 && isAgent)
-					System.out.println("Sorry, not event agents can withdraw more than $999,999.99 at once");
-				else
-					bl.addTransaction(new Transaction(TransactionCodes.WDR, accountNumber, amount, "000", "***"));
-				
-			}
-			
-			if (input.equals("transfer")) //Transferring money
-			{
-				System.out.println("Enter the account that is being transferred from"); //ask for first account
-				String accountNumber1 = s.nextLine();
-				
-				System.out.println("Enter the account that is being transferred to"); //ask for second account
-				String accountNumber2 = s.nextLine();
-				
-				System.out.println("Enter the amount to be transferred");
-				String amount = s.nextLine();
-				
-				if (Integer.parseInt(amount) > 100000 && !isAgent)
-					System.out.println("Sorry, only agents can withdraw more than $1000.00 at once");
-				else if (Integer.parseInt(amount) > 99999999 && isAgent)
-					System.out.println("Sorry, not event agents can withdraw more than $999,999.99 at once");
-				else
-					bl.addTransaction(new Transaction(TransactionCodes.XFR, accountNumber1, amount, accountNumber2, "***"));
-			}
-		}
-		
 	}
 
-	}
+
+		
 }
