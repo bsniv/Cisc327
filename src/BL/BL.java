@@ -5,19 +5,18 @@ import java.util.LinkedList;
 import DAL.Data;
 import SharedClasses.Transaction;
 import SharedClasses.Transaction.TransactionCodes;
-import SharedClasses.User;
 
 public class BL {
 
 	LinkedList<Transaction> list;
 	Data data;
-	LinkedList<User> deletedAccounts;
-	LinkedList<User> createdAccounts;
+	LinkedList<String> deletedAccounts;
+	LinkedList<String> createdAccounts;
 	
 	public BL(Data data) {
 		list = new LinkedList<Transaction>(); //store user inputs in list
-		deletedAccounts =  new LinkedList<User>(); 
-		createdAccounts =  new LinkedList<User>(); 
+		deletedAccounts =  new LinkedList<String>(); 
+		createdAccounts =  new LinkedList<String>(); 
 		this.data = data;
 	}
 	
@@ -26,30 +25,30 @@ public class BL {
 	}
 	
 	public boolean addTransaction(Transaction t){
-		for(User user : deletedAccounts){
-			if (t.getToAccountNumber().equals(user.getUsername()) || t.getFromAccountNumber().equals(user.getUsername())){
+		for(String user : deletedAccounts){
+			if (t.getToAccountNumber().equals(user) || t.getFromAccountNumber().equals(user)){
 				System.out.println("deleted account is not allowed to do transactions");
 				return false;
 			}
 		}
-		for(User user : createdAccounts){
-			if (t.getToAccountNumber().equals(user.getUsername()) || t.getFromAccountNumber().equals(user.getUsername())){
+		for(String user : createdAccounts){
+			if (t.getToAccountNumber().equals(user) || t.getFromAccountNumber().equals(user)){
 				System.out.println("created account is not allowed to do transactions");
 				return false;
 			}
 		}
 		if (t.getTC() == TransactionCodes.DEL)
-			deletedAccounts.add(new User(t.getFromAccountNumber(),t.getFromAccountNumber()));
+			deletedAccounts.add(t.getFromAccountNumber());
 		if (t.getTC() == TransactionCodes.NEW)
-			createdAccounts.add(new User(t.getFromAccountNumber(),t.getFromAccountNumber()));
+			createdAccounts.add(t.getFromAccountNumber());
 		list.add(t);
 		return true;
 	}
 
 	public boolean validateFreeAccountNumber(String accountNumber){
-		LinkedList<User> users = data.readAccountFile();
-		for(User user : users){
-			if (accountNumber.equals(user.getUsername()))
+		LinkedList<String> users = data.readAccountFile();
+		for(String user : users){
+			if (accountNumber.equals(user))
 				return false;
 		}
 		return true;

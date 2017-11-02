@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import SharedClasses.Transaction;
-import SharedClasses.User;
-
 import java.io.*;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -38,8 +36,8 @@ public class Data {
         }
     }
     
-    public LinkedList<User> readAccountFile(){
-    	LinkedList<User> users = new LinkedList<User>();
+    public LinkedList<String> readAccountFile(){
+    	LinkedList<String> users = new LinkedList<String>();
 		try (BufferedReader br = new BufferedReader(new FileReader(userFilePath))) {
 
 			String line;
@@ -47,7 +45,7 @@ public class Data {
 			while (line != null && !line.equals("0000000")) {
 				if (!checkOnlyNumbers(line))
 					throw new RuntimeException("user file corrupted");
-				users.add(new User(line,line));
+				users.add(line);
 				line = br.readLine();
 			}
 
