@@ -22,6 +22,28 @@ public class ATM
 		isAgent = false;
 	}
 	
+	public void start(BL bl) 
+	{
+		this.bl = bl;
+		
+		while (true)
+		{
+			while (!loggedIn) //wait until the user logins before accepting any other input
+				loggedIn = login();
+			
+			while (!sessionTypeChosen) //wait until the user decides to choose agent or ATM mode
+				sessionTypeChosen = chooseSessionType();
+			
+			while (loggedIn)
+			{
+				outputCommands(isAgent);
+				
+				String input = s.nextLine();
+				executeCommand (input);
+			}
+		}
+	}
+
 	private boolean login()
 	{
 		System.out.println("Please login:");
@@ -320,29 +342,6 @@ public class ATM
 		
 		bl.addTransaction(new Transaction(TransactionCodes.XFR, parts[1], parts[2], parts[3], "***"));
 	}
-	
-	public void start(BL bl) 
-	{
-		this.bl = bl;
-		
-		while (true)
-		{
-			while (!loggedIn) //wait until the user logins before accepting any other input
-				loggedIn = login();
-			
-			while (!sessionTypeChosen) //wait until the user decides to choose agent or ATM mode
-				sessionTypeChosen = chooseSessionType();
-			
-			while (loggedIn)
-			{
-				outputCommands(isAgent);
-				
-				String input = s.nextLine();
-				executeCommand (input);
-			}
-		}
-	}
-
 
 		
 }
