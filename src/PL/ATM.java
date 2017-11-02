@@ -38,8 +38,7 @@ public class ATM
 			{
 				outputCommands(isAgent);
 				
-				String input = s.nextLine();
-				executeCommand (input);
+				executeCommand (s.nextLine());
 			}
 		}
 	}
@@ -75,9 +74,9 @@ public class ATM
 	private void outputCommands(boolean isAgent)
 	{
 		if (isAgent)
-			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct\ndeleteacct\ndeposit\nwithdraw\ntransfer\n");
+			System.out.print("Please enter a command from the following list:\nlogout\ncreateacct *account-number* *account-name*\ndeleteacct *account-number* *account-name*\ndeposit *account-number* *amount*\nwithdraw *account-number* *amount*\ntransfer *from-account-number* *to-account-number* *amount*\n");
 		else
-			System.out.print("Please enter a command from the following list:\nlogout\ndeposit\nwithdraw\ntransfer\n");
+			System.out.print("Please enter a command from the following list:\nlogout\ndeposit *account-number* *amount*\nwithdraw *account-number* *amount*\ntransfer *from-account-number* *to-account-number* *amount*\n");
 	}
 	
 	private void executeCommand(String command)
@@ -110,6 +109,7 @@ public class ATM
 		
 		bl.addTransaction(new Transaction(TransactionCodes.EOS, "000", "000", "000", "***"));
 		bl.writeTransactions();	
+		System.out.println("You have successfully logged out. Have a nice day.");
 	}
 	
 	public boolean validAccountNumber(String number) //Checks if given account number is valid
@@ -229,6 +229,7 @@ public class ATM
 		if (!validAccountName(parts[2])) //Check that the account name is valid
 			return;
 			
+		System.out.println("You have successfully created an account with Account Number: " + parts[1] + " and Account Name: " + parts[2] + ".");
 		bl.addTransaction(new Transaction(TransactionCodes.NEW, parts[1], "000", "000", parts[2]));	
 	}
 	
@@ -259,6 +260,7 @@ public class ATM
 		if (!validAccountName(parts[2])) //Check that the account name is valid
 			return;
 		
+		System.out.println("You have successfully deleted the account with Account Number: " + parts[1] + " and Account Name: " + parts[2] + ".");
 		bl.addTransaction(new Transaction(TransactionCodes.DEL, parts[1], "000", "000", parts[2]));
 	}
 	
@@ -283,6 +285,7 @@ public class ATM
 		if (!validMoneyAmount(parts[2])) //Check that the money value is valid
 			return;
 		
+		System.out.println("You have successfully deposited $" + Double.parseDouble(parts[2])/100 + " to Account Number: " + parts[1] + ".");
 		bl.addTransaction(new Transaction(TransactionCodes.DEP, parts[1], parts[2], "000", "***"));	
 	}
 	
@@ -307,6 +310,7 @@ public class ATM
 		if (!validMoneyAmount(parts[2])) //Check that the money value is valid
 			return;
 		
+		System.out.println("You have successfully withdrawn $" + Double.parseDouble(parts[2])/100 + " from Account Number: " + parts[1] + ".");
 		bl.addTransaction(new Transaction(TransactionCodes.WDR, parts[1], parts[2], "000", "***"));
 	}
 	
@@ -322,7 +326,7 @@ public class ATM
 		if (!validAccountNumber(parts[1])) //Check that the first account number is valid
 			return;
 		
-		if (!validAccountNumber(parts[3])) //Check that the second account number is valid
+		if (!validAccountNumber(parts[2])) //Check that the second account number is valid
 			return;
 		
 		if (bl.validateFreeAccountNumber(parts[1])) //Check that the first account number is in use
@@ -331,16 +335,17 @@ public class ATM
 			return;
 		}
 		
-		if (bl.validateFreeAccountNumber(parts[3])) //Check that the second account number is in use
+		if (bl.validateFreeAccountNumber(parts[2])) //Check that the second account number is in use
 		{
 			System.out.println("The second account number is not assigned to an account.");
 			return;
 		}
 		
-		if (!validMoneyAmount(parts[2])) //Check that the money amount is valid
+		if (!validMoneyAmount(parts[3])) //Check that the money amount is valid
 			return;
 		
-		bl.addTransaction(new Transaction(TransactionCodes.XFR, parts[1], parts[2], parts[3], "***"));
+		System.out.println("You have successfully transferred $" + Double.parseDouble(parts[3])/100 + " from Account Number: " + parts[1] + " to Account Number: " + parts[2] + ".");
+		bl.addTransaction(new Transaction(TransactionCodes.XFR, parts[1], parts[3], parts[2], "***"));
 	}
 
 		
