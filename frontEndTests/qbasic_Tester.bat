@@ -25,7 +25,7 @@ goto :main
 	echo Running test %2 - %count%
 	echo.
 	echo %count% : %1 : %2
-	start java -jar qbasic.jar activeAccts.txt outputs\%2\%1 ^<%1 ^>outputs\%2\%count%.log
+	java -jar qbasic.jar activeAccts.txt outputs\%2\%1 <inputs\%2\%1 >outputs\%2\%count%.log
 	cd inputs\%2
 	Pause
 	echo ----------------------------------------------------------------------
