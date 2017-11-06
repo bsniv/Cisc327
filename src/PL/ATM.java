@@ -97,7 +97,6 @@ public class ATM
 	
 	private void executeCommand(String command)
 	{
-		System.out.println(command);
 		String[] inParts = command.split(" ");
 		int counter=0,pivot=0;
 		for (String str : inParts) {
@@ -256,19 +255,14 @@ public class ATM
 	
 	private void createacct(String parts[])
 	{
-		//System.out.println("right now in createacct: "+command);
 		if (!isAgent) //Do not allow unprivileged users access
 		{
 			System.out.println("Sorry, that is a privileged command. Please try again.");
 			return;
 		}
 			
-		//String[] parts = command.split(" "); //If there are more than 3 arguments, it is invalid
 		if (parts.length != 3)
 		{
-			if (parts.length == 4)
-				System.out.println("parts: "+parts[3]);
-			System.out.println("part length: "+parts.length);
 			System.out.println("That is an invalid input. Please try again.");
 			return;
 		}
