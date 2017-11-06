@@ -8,10 +8,7 @@ deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
 createacct 1234567  test
-right now in createacct: createacct 1234567  test
-parts: test
-part length: 4
-That is an invalid input. Please try again.
+That account number is already taken. Please try again.
 Please enter a command from the following list:
 logout
 createacct *account-number* *account-name*

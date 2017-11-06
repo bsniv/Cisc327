@@ -6,7 +6,6 @@ deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
 createacct 1234567 test
-right now in createacct: createacct 1234567 test
 Sorry, that is a privileged command. Please try again.
 Please enter a command from the following list:
 logout
