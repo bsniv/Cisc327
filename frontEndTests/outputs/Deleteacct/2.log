@@ -7,6 +7,7 @@ deleteacct *account-number* *account-name*
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
+deleteacct 1234567 test
 You have successfully deleted the account with Account Number: 1234567 and Account Name: test.
 Please enter a command from the following list:
 logout
@@ -15,6 +16,6 @@ deleteacct *account-number* *account-name*
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
+logout
 deleted account is not allowed to do transactions
 You have successfully logged out. Have a nice day.
-Please login:
