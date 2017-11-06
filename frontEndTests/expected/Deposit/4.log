@@ -1,19 +1,14 @@
 Please login:
-login
 Enter 'machine' for a normal session, or 'agent' for an agent session:
-machine
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-deposit 1234567 100100
 Sorry, only agents can move amounts greater than $1000. Please try again.
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-logout
 You have successfully logged out. Have a nice day.
-Please login:

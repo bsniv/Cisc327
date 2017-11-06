@@ -1,10 +1,20 @@
+<<<<<<< HEAD
 Please login:
 Please login:
 Enter 'machine' for a normal session, or 'agent' for an agent session:
+=======
+Please login:
+Please login:
+Enter 'machine' for a normal session, or 'agent' for an agent session:
+>>>>>>> eeb248c17fb383b8394d110d1ddbbf720728336a
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
+<<<<<<< HEAD
 You have successfully logged out. Have a nice day.
 Please login:
+=======
+You have successfully logged out. Have a nice day.
+>>>>>>> eeb248c17fb383b8394d110d1ddbbf720728336a

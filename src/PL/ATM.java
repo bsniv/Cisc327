@@ -2,6 +2,9 @@ package PL;
 
 
 import java.util.Scanner;
+
+import org.omg.Messaging.SyncScopeHelper;
+
 import BL.BL;
 import SharedClasses.Transaction;
 import SharedClasses.Transaction.TransactionCodes;
@@ -38,7 +41,8 @@ public class ATM
 			{
 				outputCommands(isAgent);
 				
-				executeCommand (s.nextLine());
+				if (s.hasNextLine())
+					executeCommand (s.nextLine());
 			}
 		}
 	}
@@ -46,9 +50,14 @@ public class ATM
 	private boolean login()
 	{
 		System.out.println("Please login:");
-		String input = s.nextLine();
-		if (input.equals("login"))
-			return true;
+		if (s.hasNextLine())
+		{
+			String input = s.nextLine();
+			if (input.equals("login"))
+				return true;
+			else
+				return false;
+		}
 		else
 			return false;
 	}
@@ -56,19 +65,25 @@ public class ATM
 	private boolean chooseSessionType()
 	{
 		System.out.println("Enter 'machine' for a normal session, or 'agent' for an agent session:");
-		String input = s.nextLine();
-		if (input.equals("machine"))
+		if (s.hasNextLine())
 		{
-			isAgent = false;
-			return true;
-		}
-		else if  (input.equals("agent"))
-		{
-			isAgent = true;
-			
-			return true;
+			String input = s.nextLine();
+			if (input.equals("machine"))
+			{
+				isAgent = false;
+				return true;
+			}
+			else if  (input.equals("agent"))
+			{
+				isAgent = true;
+				
+				return true;
+			}
+			else
+				return false;
 		}
 		else
+			System.exit(0);
 			return false;
 	}
 	
@@ -82,21 +97,37 @@ public class ATM
 	
 	private void executeCommand(String command)
 	{
-		String[] parts = command.split(" ");
+		String[] inParts = command.split(" ");
+		int counter=0,pivot=0;
+		for (String str : inParts) {
+			if (!str.equals(" ") && !str.equals(""))
+				counter++;
+		}
+		String[] parts = new String[counter];
+		counter=0;
+		for (String str : inParts) {
+			if (!str.equals(" ") && !str.equals(""))
+			{
+				parts[pivot] = inParts[counter];
+				pivot++;
+			}
+			counter++;
+		}	
+		
 		
 		switch (parts[0])
 		{
 		case "logout":     logout();
 					       break;
-		case "createacct": createacct(command);
+		case "createacct": createacct(parts);
 						   break;
-		case "deleteacct": deleteacct(command);
+		case "deleteacct": deleteacct(parts);
 						   break;
-		case "deposit":    deposit(command);
+		case "deposit":    deposit(parts);
 						   break;
-		case "withdraw":   withdraw(command);
+		case "withdraw":   withdraw(parts);
 						   break;
-		case "transfer":   transfer(command);
+		case "transfer":   transfer(parts);
 						   break;
 		default: 		   System.out.println("That is an invalid input. Please try again.");
 		}
@@ -111,6 +142,7 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.EOS, "0000000", "000", "0000000", "***"));
 		bl.writeTransactions();	
 		System.out.println("You have successfully logged out. Have a nice day.");
+		System.exit(0);
 	}
 	
 	public boolean validAccountNumber(String number) //Checks if given account number is valid
@@ -221,7 +253,7 @@ public class ATM
 		return true;
 	}
 	
-	private void createacct(String command)
+	private void createacct(String parts[])
 	{
 		if (!isAgent) //Do not allow unprivileged users access
 		{
@@ -229,7 +261,6 @@ public class ATM
 			return;
 		}
 			
-		String[] parts = command.split(" "); //If there are more than 3 arguments, it is invalid
 		if (parts.length != 3)
 		{
 			System.out.println("That is an invalid input. Please try again.");
@@ -252,7 +283,7 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.NEW, parts[1], "000", "0000000", parts[2]));	
 	}
 	
-	private void deleteacct(String command)
+	private void deleteacct(String parts[])
 	{
 		if (!isAgent)
 		{
@@ -260,7 +291,6 @@ public class ATM
 			return;
 		}
 			
-		String[] parts = command.split(" ");
 		if (parts.length != 3)
 		{
 			System.out.println("That is an invalid input. Please try again.");
@@ -283,9 +313,8 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.DEL, parts[1], "000", "0000000", parts[2]));
 	}
 	
-	private void deposit(String command)
+	private void deposit(String parts[])
 	{
-		String[] parts = command.split(" ");
 		if (parts.length != 3)
 		{
 			System.out.println("That is an invalid input. Please try again.");
@@ -308,9 +337,8 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.DEP, parts[1], parts[2], "0000000", "***"));	
 	}
 	
-	private void withdraw(String command)
+	private void withdraw(String parts[])
 	{
-		String[] parts = command.split(" ");
 		if (parts.length != 3)
 		{
 			System.out.println("That is an invalid input. Please try again.");
@@ -333,9 +361,8 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.WDR, parts[1], parts[2], "0000000", "***"));
 	}
 	
-	private void transfer(String command)
+	private void transfer(String parts[])
 	{
-		String[] parts = command.split(" ");
 		if (parts.length != 4)
 		{
 			System.out.println("That is an invalid input. Please try again.");
