@@ -5,12 +5,10 @@ logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-transfer 1a34569 79o4321 50r0
 The account number may only be comprised of digits 0-9, and may not include a leading 0. Please try again
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-logout
 You have successfully logged out. Have a nice day.

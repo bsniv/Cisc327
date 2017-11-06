@@ -5,12 +5,10 @@ logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-deposit 1234567 5000
 You have successfully deposited $50.0 to Account Number: 1234567.
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-logout
 You have successfully logged out. Have a nice day.

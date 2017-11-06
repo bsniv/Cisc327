@@ -5,19 +5,16 @@ logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-withdraw 1234567 50000
 You have successfully withdrawn $500.0 from Account Number: 1234567.
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-withdraw 1234567 50100
 You have successfully withdrawn $501.0 from Account Number: 1234567.
 Please enter a command from the following list:
 logout
 deposit *account-number* *amount-in-cents*
 withdraw *account-number* *amount-in-cents*
 transfer *from-account-number* *to-account-number* *amount-in-cents*
-logout
 You have successfully logged out. Have a nice day.
