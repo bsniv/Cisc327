@@ -2,6 +2,9 @@ package PL;
 
 
 import java.util.Scanner;
+
+import org.omg.Messaging.SyncScopeHelper;
+
 import BL.BL;
 import SharedClasses.Transaction;
 import SharedClasses.Transaction.TransactionCodes;
@@ -38,7 +41,8 @@ public class ATM
 			{
 				outputCommands(isAgent);
 				
-				executeCommand (s.nextLine());
+				if (s.hasNextLine())
+					executeCommand (s.nextLine());
 			}
 		}
 	}
@@ -46,9 +50,14 @@ public class ATM
 	private boolean login()
 	{
 		System.out.println("Please login:");
-		String input = s.nextLine();
-		if (input.equals("login"))
-			return true;
+		if (s.hasNextLine())
+		{
+			String input = s.nextLine();
+			if (input.equals("login"))
+				return true;
+			else
+				return false;
+		}
 		else
 			return false;
 	}
@@ -56,19 +65,25 @@ public class ATM
 	private boolean chooseSessionType()
 	{
 		System.out.println("Enter 'machine' for a normal session, or 'agent' for an agent session:");
-		String input = s.nextLine();
-		if (input.equals("machine"))
+		if (s.hasNextLine())
 		{
-			isAgent = false;
-			return true;
-		}
-		else if  (input.equals("agent"))
-		{
-			isAgent = true;
-			
-			return true;
+			String input = s.nextLine();
+			if (input.equals("machine"))
+			{
+				isAgent = false;
+				return true;
+			}
+			else if  (input.equals("agent"))
+			{
+				isAgent = true;
+				
+				return true;
+			}
+			else
+				return false;
 		}
 		else
+			System.exit(0);
 			return false;
 	}
 	
@@ -82,6 +97,7 @@ public class ATM
 	
 	private void executeCommand(String command)
 	{
+		System.out.println(command);
 		String[] parts = command.split(" ");
 		
 		switch (parts[0])
@@ -111,6 +127,7 @@ public class ATM
 		bl.addTransaction(new Transaction(TransactionCodes.EOS, "0000000", "000", "0000000", "***"));
 		bl.writeTransactions();	
 		System.out.println("You have successfully logged out. Have a nice day.");
+		System.exit(0);
 	}
 	
 	public boolean validAccountNumber(String number) //Checks if given account number is valid
@@ -223,6 +240,7 @@ public class ATM
 	
 	private void createacct(String command)
 	{
+		System.out.println("right now in createacct: "+command);
 		if (!isAgent) //Do not allow unprivileged users access
 		{
 			System.out.println("Sorry, that is a privileged command. Please try again.");
@@ -232,6 +250,9 @@ public class ATM
 		String[] parts = command.split(" "); //If there are more than 3 arguments, it is invalid
 		if (parts.length != 3)
 		{
+			if (parts.length == 4)
+				System.out.println("parts: "+parts[3]);
+			System.out.println("part length: "+parts.length);
 			System.out.println("That is an invalid input. Please try again.");
 			return;
 		}
